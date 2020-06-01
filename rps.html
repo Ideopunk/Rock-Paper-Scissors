@@ -8,15 +8,24 @@
     <body>
         <script>
 
+function capitalize(strang) {
+    strang = strang.toLowerCase();
+    strung = strang.slice(0, 1).toUpperCase();
+    strung = strung + strang.slice(1)
+    return strung
+}
 
 function playRound(player, comp) {
-    if (player === comp) {
-        return "Tie game!"
+    if ((player === comp) || (player === null) || (comp === null)) {
+        return 0
     }
-    else if ((player === 'rock' && comp === 'paper') || (player === 'paper' && comp === 'scissors') || (player === 'scissors' && comp === 'rock'))
-        return "You lose! ${comp} beats ${player}!"
+    else if ((player === 'rock' && comp === 'paper') || (player === 'paper' && comp === 'scissors') || (player === 'scissors' && comp === 'rock')) {
+        comp = capitalize(comp)
+        return `You lose! ${comp} beats ${player}!`
+    } 
     else {
-        return "You win! ${player} beats {comp}!"
+        player = capitalize(player)
+        return `You win! ${player} beats ${comp}!`
     }
 }
 
@@ -34,15 +43,39 @@ function computerPlay() {
 }
 
 function game() {
+    let playerscore = 0;
+    let compscore = 0;
     for (let i = 0; i < 5; i++) {
-        console.log(playRound(playerSelection, computerSelection))
+        const comp = computerPlay()
+        let player = prompt("Please enter 'rock', 'paper', or 'scissors'.");
+        player = player.toLowerCase();
+        let point = playRound(player, comp);
+        if (point === 0) {
+            console.log("Tie game!");
+        }
+        else if (point === -1) {
+            comp = capitalize(comp);
+            compscore++;
+            console.log(`You lose! ${comp} beats ${player}!`);
+        }
+        else {
+            player = capitalize(player);
+            playerscore++;
+            console.log(`You win! ${player} beats ${comp}!`);
+        }
+    }
+    if (playerscore > compscore) {
+        console.log(`Congratulations! You win, ${playerscore} to ${compscore}!`);
+    }
+    else if (compscore > playerscore) {
+        console.log(`Well shoot! You lose, ${compscore} to ${playerscore}!`);
+    }
+    else {
+        console.log(`Darn, the scores are tied, ${compscore} to ${compscore}. Try harder!`);
     }
 }
 
-let playerSelection = prompt("Please enter 'rock', 'paper', or 'scissors'")
-const computerSelection = computerPlay()
 game()
-// console.log(playRound(playerSelection, computerSelection))
 
         </script>
     </body>
