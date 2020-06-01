@@ -21,11 +21,11 @@ function playRound(player, comp) {
     }
     else if ((player === 'rock' && comp === 'paper') || (player === 'paper' && comp === 'scissors') || (player === 'scissors' && comp === 'rock')) {
         comp = capitalize(comp)
-        return `You lose! ${comp} beats ${player}!`
+        return -1
     } 
     else {
         player = capitalize(player)
-        return `You win! ${player} beats ${comp}!`
+        return 1
     }
 }
 
@@ -46,7 +46,7 @@ function game() {
     let playerscore = 0;
     let compscore = 0;
     for (let i = 0; i < 5; i++) {
-        const comp = computerPlay()
+        let comp = computerPlay()
         let player = prompt("Please enter 'rock', 'paper', or 'scissors'.");
         player = player.toLowerCase();
         let point = playRound(player, comp);
