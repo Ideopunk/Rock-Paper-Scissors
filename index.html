@@ -62,7 +62,6 @@ function compWin() {
     let compCurrent = document.querySelector('#compScore');
     compNumb = Number(compCurrent.textContent);
     compNumb++;
-    // compCurrent = Number(compCurrent) + 1;
     compCurrent.textContent = compNumb;
 }
 
@@ -99,7 +98,6 @@ let round = 0;
 function playRound(player) {
     let comp = computerPlay()
     if ((player === comp) || (player === null) || (comp === null)) {
-        // return 0
         console.log("Tie game!");
         result = "Tie game!";
     }
@@ -108,14 +106,12 @@ function playRound(player) {
         console.log(`You lose! ${comp} beats ${player}!`);
         result = `You lose! ${comp} beats ${player}!`;
         compWin();
-        // return -1
     } 
     else {
         player = capitalize(player)
         console.log(`You win! ${player} beats ${comp}!`);
         result = `You win! ${player} beats ${comp}!`;
         playerWin();
-        // return 1
     }
     let newDiv = document.createElement('div');
     let newContent = document.createTextNode(result);
@@ -132,7 +128,6 @@ const buttons = document.querySelectorAll('button');
 
 buttons.forEach((button) => {
     button.addEventListener('click', (e) => {
-        // alert(button.id);
         playRound(button.id);
     });
 });
