@@ -4,29 +4,45 @@
         <title>
             RPS
         </title>
+
+        <style>
+            #line {
+                display: flex;
+                padding: 10px;
+            }
+
+            button {
+                margin: 10px;
+            }
+
+            p {
+                margin: 15px;
+            }
+
+            .center {
+                text-align: center;
+            }
+        </style>
     </head>
     <body>
-        <script>
+        <div id="line">
+            <button id="rock">Rock</button>
+            <button id='paper'>Paper</button>
+            <button id='scissors'>Scissors</button>
+
+            <p>Player Score: </p>
+            <p id='playerScore'>0</p>
+            <p>Computer Score:</p>
+            <p id='compScore'>0</p>
+        </div>
+
+<script>
 
 function capitalize(strang) {
     strang = strang.toLowerCase();
     strung = strang.slice(0, 1).toUpperCase();
     strung = strung + strang.slice(1)
     return strung
-}
-
-function playRound(player, comp) {
-    if ((player === comp) || (player === null) || (comp === null)) {
-        return 0
-    }
-    else if ((player === 'rock' && comp === 'paper') || (player === 'paper' && comp === 'scissors') || (player === 'scissors' && comp === 'rock')) {
-        comp = capitalize(comp)
-        return -1
-    } 
-    else {
-        player = capitalize(player)
-        return 1
-    }
 }
 
 function computerPlay() {
@@ -42,41 +58,87 @@ function computerPlay() {
     }
 }
 
-function game() {
-    let playerscore = 0;
-    let compscore = 0;
-    for (let i = 0; i < 5; i++) {
-        let comp = computerPlay()
-        let player = prompt("Please enter 'rock', 'paper', or 'scissors'.");
-        player = player.toLowerCase();
-        let point = playRound(player, comp);
-        if (point === 0) {
-            console.log("Tie game!");
-        }
-        else if (point === -1) {
-            comp = capitalize(comp);
-            compscore++;
-            console.log(`You lose! ${comp} beats ${player}!`);
-        }
-        else {
-            player = capitalize(player);
-            playerscore++;
-            console.log(`You win! ${player} beats ${comp}!`);
-        }
+function compWin() {
+    let compCurrent = document.querySelector('#compScore');
+    compNumb = Number(compCurrent.textContent);
+    compNumb++;
+    // compCurrent = Number(compCurrent) + 1;
+    compCurrent.textContent = compNumb;
+}
+
+function playerWin() {
+    let playerCurrent = document.querySelector('#playerScore');
+    playerNumb = Number(playerCurrent.textContent);
+    playerNumb++;
+    playerCurrent.textContent = playerNumb;
+}
+
+function gameEnd() {
+    let compScore = document.querySelector('#compScore').textContent;
+    let playerScore = document.querySelector('#playerScore').textContent;
+    const win = document.createElement('h1');
+    win.setAttribute('id', 'win')
+    if (compScore === playerScore) {
+        win.textContent = `Darn, the scores are tied, ${playerScore} to ${compScore}. Try harder!`;
+    } else if (compScore > playerScore) {
+        win.textContent = `Well shoot! You lose, ${compScore} to ${playerScore}!`
+    } else {
+        win.textContent = `Congratulations! You win, ${playerScore} to ${compScore}!`
     }
-    if (playerscore > compscore) {
-        console.log(`Congratulations! You win, ${playerscore} to ${compscore}!`);
+    let beginning = document.querySelector('body').firstChild
+    const consolation = document.createElement('p');
+    consolation.textContent = "You can keep playing if you want, or refresh for a new tournament :)";
+    consolation.className = 'center';
+    win.className = 'center';
+    document.body.insertBefore(consolation, beginning);
+    document.body.insertBefore(win, consolation);
+}
+
+
+let round = 0;
+function playRound(player) {
+    let comp = computerPlay()
+    if ((player === comp) || (player === null) || (comp === null)) {
+        // return 0
+        console.log("Tie game!");
+        result = "Tie game!";
     }
-    else if (compscore > playerscore) {
-        console.log(`Well shoot! You lose, ${compscore} to ${playerscore}!`);
-    }
+    else if ((player === 'rock' && comp === 'paper') || (player === 'paper' && comp === 'scissors') || (player === 'scissors' && comp === 'rock')) {
+        comp = capitalize(comp)
+        console.log(`You lose! ${comp} beats ${player}!`);
+        result = `You lose! ${comp} beats ${player}!`;
+        compWin();
+        // return -1
+    } 
     else {
-        console.log(`Darn, the scores are tied, ${compscore} to ${compscore}. Try harder!`);
+        player = capitalize(player)
+        console.log(`You win! ${player} beats ${comp}!`);
+        result = `You win! ${player} beats ${comp}!`;
+        playerWin();
+        // return 1
+    }
+    let newDiv = document.createElement('div');
+    let newContent = document.createTextNode(result);
+    newDiv.appendChild(newContent);
+    let lastElm = document.querySelector('body').lastChild
+    document.body.insertBefore(newDiv, lastElm);
+    round++;
+    if (round === 5) {
+        gameEnd();
     }
 }
 
-game()
+const buttons = document.querySelectorAll('button');
 
-        </script>
+buttons.forEach((button) => {
+    button.addEventListener('click', (e) => {
+        // alert(button.id);
+        playRound(button.id);
+    });
+});
+
+
+
+</script>
     </body>
 </html>
